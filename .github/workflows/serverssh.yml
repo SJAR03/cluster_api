@@ -19,6 +19,7 @@ jobs:
           host: ${{ secrets.SERVER2_HOST }}
           username: ${{ secrets.SERVER2_USER }}
           key: ${{ secrets.SERVER2_SSH_KEY }}
+          passphrase: ${{ secrets.SERVER2_SSH_PASSPHRASE }}
           script: |
             cd /apps/cluster_api
             echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" > .env
