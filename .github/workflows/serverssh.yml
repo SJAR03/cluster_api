@@ -28,4 +28,4 @@ jobs:
             git pull origin servidor2
             docker-compose down --remove-orphans
             docker image prune -a
-            docker-compose up --build -d
+            docker-compose up --build --no-cache -d
