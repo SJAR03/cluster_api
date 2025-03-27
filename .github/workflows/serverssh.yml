@@ -25,6 +25,6 @@ jobs:
             echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" > .env
             echo "PORT=5000" >> .env
             echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
-            git pull origin servidor2
             docker-compose down --remove-orphans
+            docker-compose up --build --no-cache -d
             docker-compose up --build -d
