@@ -1,0 +1,26 @@
+name: Deploy to server with password (rodolfo)
+
+on:
+  push:
+    branches:
+      - servidor1
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Deploy via SSH (Password)
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER1_HOST }}
+          username: ${{ secrets.SERVER1_USER }}
+          password: ${{ secrets.SERVER1_PASSWORD }}
+          script: |
+            cd /apps/cluster_api
+            git pull origin servidor1
+            docker-compose down
+            docker-compose up --build -d
