@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  app:
+    build: .
+    deploy:
+      replicas: 3  # Levanta 3 contenedores en cada servidor
+    ports:
+      - "5000:5000"
+      - "5001:5000"
+      - "5002:5000"  # Expone cada instancia en un puerto distinto
+    env_file:
+      - .env
