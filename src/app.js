@@ -22,18 +22,9 @@ const swaggerOptions = {
       version: "1.0.0",
       description: "API para reservas de cine",
     },
-    components: {
-      securitySchemes: {
-        bearerAuth: {
-          type: "http",
-          scheme: "bearer",
-          bearerFormat: "JWT",
-        },
-      },
-    },
-    security: [
+    servers: [
       {
-        BearerAuth: [],
+        url: "https://cluster.sayerdis.com",
       },
     ],
   },
