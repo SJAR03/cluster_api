@@ -26,4 +26,4 @@ jobs:
             echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
             git pull origin servidor2
             docker-compose down
-            docker-compose up --build -d
+            docker-compose up --build --no-cache -d
