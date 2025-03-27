@@ -1,13 +1,20 @@
 version: "3.8"
 
 services:
-  app:
+  app1:
     build: .
-    deploy:
-      replicas: 3  # Levanta 3 contenedores en cada servidor
+    container_name: cine_api_1
     ports:
       - "5000:5000"
-      - "5001:5000"
-      - "5002:5000"  # Expone cada instancia en un puerto distinto
     env_file:
       - .env
+    restart: unless-stopped
+
+  app2:
+    build: .
+    container_name: cine_api_2
+    ports:
+      - "5001:5000"
+    env_file:
+      - .env
+    restart: unless-stopped
