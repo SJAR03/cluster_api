@@ -1,0 +1,26 @@
+name: Deploy to Server with SSH Key (sjar)
+
+on:
+  push:
+    branches:
+      - servidor2
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Deploy via SSH (SSH Key)
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER2_HOST }}
+          username: ${{ secrets.SERVER2_USER }}
+          key: ${{ secrets.SERVER2_SSH_KEY }}
+          script: |
+            cd /apps/cluster_api
+            git pull origin servidor2
+            docker-compose down
+            docker-compose up --build -d
