@@ -22,9 +22,18 @@ const swaggerOptions = {
       version: "1.0.0",
       description: "API para reservas de cine",
     },
-    servers: [
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+        },
+      },
+    },
+    security: [
       {
-        url: "http://localhost:5000",
+        BearerAuth: [],
       },
     ],
   },
