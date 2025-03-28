@@ -1,5 +1,5 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
@@ -8,19 +8,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id    Int    @id @default(autoincrement())
-  email String @unique
-  pwd   String
-  reservations Reservation[]
+model users {
+  id           Int       @id @default(autoincrement())
+  email        String    @unique(map: "email") @db.VarChar(255)
+  pwd          String    @db.VarChar(255)
+  reservations reserva[]
 }
 
-model Reservation {
-  id     Int    @id @default(autoincrement())
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId Int
-  movie  String
-  date   DateTime
-  time   String
-  sala   Int
+model reserva {
+  id      Int      @id @default(autoincrement())
+  user_id Int
+  movie   String   @db.VarChar(255)
+  date    DateTime @db.Date
+  time    String
+  sala    Int
+  user    users    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "reserva_ibfk_1")
+
+  @@index([user_id], map: "user_id")
 }
