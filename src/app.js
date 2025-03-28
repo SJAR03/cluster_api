@@ -26,6 +26,9 @@ const swaggerOptions = {
       {
         url: "https://cluster.sayerdis.com",
       },
+      {
+        url: "http://localhost:3000",
+      },
     ],
   },
   apis: ["./*.js"], // Archivos con documentación de rutas
@@ -125,12 +128,15 @@ app.post("/api/auth/register", async (req, res) => {
   const hashedPassword = await bcrypt.hash(password, 10);
 
   try {
-    const user = await prisma.user.create({
+    const user = await prisma.users.create({
       data: { email, pwd: hashedPassword },
     });
     res.json({ id: user.id, email: user.email });
-  } catch {
-    res.status(400).json({ message: "Error al registrar usuario" });
+  } catch (error) {
+    console.error("Error en registro:", error); // <-- Muestra el error en la consola
+    res
+      .status(400)
+      .json({ message: "Error al registrar usuario", error: error.message });
   }
 });
 
@@ -169,7 +175,7 @@ app.post("/api/auth/register", async (req, res) => {
  */
 app.post("/api/auth/login", async (req, res) => {
   const { email, password } = req.body;
-  const user = await prisma.user.findUnique({ where: { email } });
+  const user = await prisma.users.findUnique({ where: { email } });
 
   if (!user || !(await bcrypt.compare(password, user.pwd))) {
     return res.status(401).json({ message: "Credenciales incorrectas" });
@@ -222,16 +228,36 @@ app.post("/api/auth/login", async (req, res) => {
  */
 app.post("/api/reservations", authMiddleware, async (req, res) => {
   const { movie, date, time, sala } = req.body;
-  const reservation = await prisma.reservation.create({
-    data: {
-      movie,
-      date: new Date(date),
-      time,
-      sala,
-      userId: req.user.id,
-    },
+
+  console.log("Datos recibidos:", {
+    movie,
+    date,
+    time,
+    sala,
+    userId: req.user.id,
   });
-  res.json(reservation);
+
+  try {
+    const reservation = await prisma.reserva.create({
+      data: {
+        movie,
+        date: new Date(date),
+        time: time,
+        sala,
+        user: {
+          connect: { id: req.user.id },
+        },
+      },
+    });
+
+    console.log("Reserva creada con éxito:", reservation);
+    res.json(reservation);
+  } catch (error) {
+    console.error("Error al crear la reserva:", error);
+    res
+      .status(500)
+      .json({ message: "Error al crear la reserva", error: error.message });
+  }
 });
 
 /**
@@ -255,8 +281,8 @@ app.post("/api/reservations", authMiddleware, async (req, res) => {
  *         description: Token inválido
  */
 app.get("/api/reservations", authMiddleware, async (req, res) => {
-  const reservations = await prisma.reservation.findMany({
-    where: { userId: req.user.id },
+  const reservations = await prisma.reserva.findMany({
+    where: { user_id: req.user.id },
   });
   res.json(reservations);
 });
