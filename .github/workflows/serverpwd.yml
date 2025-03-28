@@ -20,7 +20,7 @@ jobs:
           username: ${{ secrets.SERVER1_USER }}
           password: ${{ secrets.SERVER1_PASSWORD }}
           port: ${{ secrets.SERVER1_SSH_PORT }}
-          request_tty: true
+          request_pty: true
           debug: true
           script: |
             cd /apps/cluster_api
