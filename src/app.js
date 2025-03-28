@@ -24,7 +24,7 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: "https://cluster.sayerdis.com/api",
+        url: "https://cluster.sayerdis.com",
       },
     ],
   },
