@@ -5,7 +5,7 @@ services:
     build: .
     container_name: cine_api_1
     ports:
-      - "127.0.0.1:5000:5000"
+      - "5000:5000"
     env_file:
       - .env
     restart: unless-stopped
@@ -14,7 +14,7 @@ services:
     build: .
     container_name: cine_api_2
     ports:
-      - "127.0.0.1:5001:5000"
+      - "5001:5000"
     env_file:
       - .env
     restart: unless-stopped
